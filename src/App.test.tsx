@@ -2,8 +2,9 @@ import React from 'react'
 import { render } from '@testing-library/react'
 import App from './App'
 
-test('renders learn react link', () => {
+test('renders Stockprices title', () => {
   const { getByText } = render(<App />)
-  const linkElement = getByText(/learn react/i)
-  expect(linkElement).toBeInTheDocument()
+
+  const title = getByText('Apple stockprices:')
+  expect(title).toBeInTheDocument()
 })
