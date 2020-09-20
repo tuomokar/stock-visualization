@@ -1,7 +1,6 @@
 import React from 'react'
 
-import './App.css'
-import StocksGraphs from './StocksGraphs'
+import StocksGraphs from '../components/StocksGraphs'
 
 const App = () => {
   return (

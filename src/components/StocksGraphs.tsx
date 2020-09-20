@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react'
 import Highcharts, { Options } from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 
-import { fetchStockData } from './webapi/stock-data'
-import './App.css'
-import StockData from './types/StockData'
-import StockPriceType from './types/StockPriceType'
+import { fetchStockData } from '../webapi/stock-data'
+import StockData from '../types/StockData'
+import StockPriceType from '../types/StockPriceType'
 
 const testChartBaseOptions: Options = {
   title: {
