@@ -1,11 +1,13 @@
-import StockData from '../types/StockData'
-import mockdata from './mock.json'
+import StockData from '../../common/types/StockData'
+import axios from 'axios'
 
 // Although this doesn't do anyhing asynchronously at the moment, make it an async
 // function already so that at some point when we do actually call some API here,
 // we don't need to do any changes to the caller of this function regarding that
 export const fetchStockData = async (): Promise<StockData> => {
-  const timeSeries = mockdata['Time Series (Daily)']
+  const { data: stockData } = await axios.get('/api/stockprices/AAPL')
+
+  const timeSeries = stockData['Time Series (Daily)']
 
   const stocksData: StockData['values'] = Object.keys(timeSeries).map(day => {
     const stocksForDay = timeSeries[day as keyof typeof timeSeries]
@@ -22,7 +24,7 @@ export const fetchStockData = async (): Promise<StockData> => {
     }
   })
 
-  const originalMetadata = mockdata['Meta Data']
+  const originalMetadata = stockData['Meta Data']
 
   const meta: StockData['meta'] = {
     company: originalMetadata['2. Symbol'],

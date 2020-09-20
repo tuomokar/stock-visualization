@@ -24,3 +24,8 @@ yarn-error.log*
 
 # next.js cache
 .next
+
+# API key for Alphavantage.
+# Note that this is far from an ideal solution (there are solutions such as Blackbox or Docket Secrets)
+# but this works for now locally as an easy solution.
+server/apikey.ts

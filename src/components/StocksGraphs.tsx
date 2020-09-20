@@ -3,8 +3,8 @@ import Highcharts, { Options } from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 
 import { fetchStockData } from '../webapi/stock-data'
-import StockData from '../types/StockData'
-import StockPriceType from '../types/StockPriceType'
+import StockData from '../../common/types/StockData'
+import StockPriceType from '../../common/types/StockPriceType'
 
 const testChartBaseOptions: Options = {
   title: {
