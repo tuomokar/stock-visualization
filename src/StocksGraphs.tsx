@@ -50,7 +50,10 @@ const StocksGraphs: React.FC = () => {
       options={{
         ...testChartBaseOptions,
         series: priceTypes.map(priceType => ({
-          data: stocksData.values.map(({ data }) => data[priceType]),
+          data: stocksData.values.map(({ data, time }) => ({
+            y: data[priceType],
+            name: time
+          })),
           name: priceType
         }))
       }}
