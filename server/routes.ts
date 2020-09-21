@@ -68,20 +68,23 @@ router.get(
       timeSeriesFunctionInApiResponse[timeSeriesFunction]
     const timeSeries = fetchedStockData[timeSeriesInApiResponse]
 
-    const stocksData: StockData['values'] = Object.keys(timeSeries).map(day => {
-      const stocksForDay = timeSeries[day as keyof typeof timeSeries]
+    const stocksData: StockData['values'] = Object.keys(timeSeries)
+      .map(day => {
+        const stocksForDay = timeSeries[day as keyof typeof timeSeries]
 
-      return {
-        time: day,
-        data: {
-          open: Number(stocksForDay['1. open']),
-          high: Number(stocksForDay['2. high']),
-          low: Number(stocksForDay['3. low']),
-          close: Number(stocksForDay['4. close']),
-          volume: Number(stocksForDay['5. volume'])
+        return {
+          time: day,
+          data: {
+            open: Number(stocksForDay['1. open']),
+            high: Number(stocksForDay['2. high']),
+            low: Number(stocksForDay['3. low']),
+            close: Number(stocksForDay['4. close']),
+            volume: Number(stocksForDay['5. volume'])
+          }
         }
-      }
-    })
+      })
+      // JS dates aren't very good but works for now..
+      .sort((a, b) => new Date(a.time).valueOf() - new Date(b.time).valueOf())
 
     const originalMetadata = fetchedStockData['Meta Data']
 
