@@ -1,2 +1,5 @@
 # next.js cache
 .next
+
+# production build
+dist

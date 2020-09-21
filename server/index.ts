@@ -15,7 +15,6 @@ const port = process.env.PORT || 3000
 type AlphaVantageApiResponseForDailyTimeSeries = AlphaVantageApiResponse<
   'Time Series (Daily)'
 >
-
 ;(async () => {
   try {
     await app.prepare()
