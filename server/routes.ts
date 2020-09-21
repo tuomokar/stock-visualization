@@ -52,9 +52,17 @@ router.get(
       return
     }
 
-    const { data: fetchedStockData } = await axios.get<AlphaVantageApiResponse>(
-      `https://www.alphavantage.co/query?function=${timeSeriesFunctionForApi}&symbol=${company}&apikey=${alphavantageApiKey}`
-    )
+    let fetchedStockData: AlphaVantageApiResponse | null = null
+
+    try {
+      const { data } = await axios.get<AlphaVantageApiResponse>(
+        `https://www.alphavantage.co/query?function=${timeSeriesFunctionForApi}&symbol=${company}&apikey=${alphavantageApiKey}`
+      )
+      fetchedStockData = data
+    } catch (e) {
+      next(new Error('Failed to read data from external API'))
+      return
+    }
 
     const timeSeriesInApiResponse =
       timeSeriesFunctionInApiResponse[timeSeriesFunction]
