@@ -1,13 +1,13 @@
-type TimeSeriesFunction =
+export type TimeSeriesFunctionFromApi =
   | 'Time Series (Daily)'
-  | 'Time Series (Monthly)'
-  | 'Time Series (Yearly)'
+  | 'Weekly Time Series'
+  | 'Monthly Time Series'
 
 // due to how TypeScript works, we can't put the meta data together
 // with the time series data directly, so we circumvent the issue
 // through an intersection type.
-type AlphaVantageApiResponse<T extends TimeSeriesFunction> = {
-  [key in T]: {
+type AlphaVantageApiResponse = {
+  [key in TimeSeriesFunctionFromApi]: {
     [key: string]: {
       '1. open': string
       '2. high': string

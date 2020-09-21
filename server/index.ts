@@ -1,4 +1,4 @@
-import express, { Request } from 'express'
+import express from 'express'
 import next from 'next'
 
 import routes from './routes'

@@ -3,28 +3,62 @@ import axios from 'axios'
 
 // TODO: needs a better solution (though this one works for now locally)
 import { alphavantageApiKey } from './apikey'
-import AlphaVantageApiResponse from './types/AlphaVantageApiResponse'
+import AlphaVantageApiResponse, {
+  TimeSeriesFunctionFromApi
+} from './types/AlphaVantageApiResponse'
 import StockData from '../common/types/StockData'
+import TimeSeriesFunction from '../common/types/TimeSeriesFunction'
+import {
+  timeSeriesFunctionsForApi,
+  timeSeriesFunctionInApiResponse
+} from './constants/time-series'
+import { isTimeSeriesFunctionValid } from './validate/time-series'
 
-// TODO: make it possible to have other time series
-type AlphaVantageApiResponseForDailyTimeSeries = AlphaVantageApiResponse<
-  'Time Series (Daily)'
->
+type TimeSeriesFromApi =
+  | 'Time Series (Daily)'
+  | 'Time Series (Monthly)'
+  | 'Time Series (Yearly)'
 
 const router = express.Router()
 
+interface RouteParams {
+  company: string
+}
+
+interface QueryParams {
+  timeSeriesFunction?: TimeSeriesFunction
+}
+
 router.get(
   '/api/stockprices/:company',
-  async (req: Request<{ company: string }>, res: Response<StockData>) => {
-    const company = req.params.company
+  async (
+    req: Request<RouteParams, any, any, QueryParams>,
+    res: Response<StockData>,
+    next
+  ) => {
+    const { company } = req.params
+    const { timeSeriesFunction = 'Daily' } = req.query
 
-    const { data: fetchedStockData } = await axios.get<
-      AlphaVantageApiResponseForDailyTimeSeries
-    >(
-      `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${company}&apikey=${alphavantageApiKey}`
+    if (!isTimeSeriesFunctionValid(timeSeriesFunction)) {
+      next(new Error('Time series function was not valid!'))
+      return
+    }
+
+    const timeSeriesFunctionForApi =
+      timeSeriesFunctionsForApi[timeSeriesFunction]
+
+    if (!timeSeriesFunctionForApi) {
+      next(new Error('timeSeriesFunction not'))
+      return
+    }
+
+    const { data: fetchedStockData } = await axios.get<AlphaVantageApiResponse>(
+      `https://www.alphavantage.co/query?function=${timeSeriesFunctionForApi}&symbol=${company}&apikey=${alphavantageApiKey}`
     )
 
-    const timeSeries = fetchedStockData['Time Series (Daily)']
+    const timeSeriesInApiResponse =
+      timeSeriesFunctionInApiResponse[timeSeriesFunction]
+    const timeSeries = fetchedStockData[timeSeriesInApiResponse]
 
     const stocksData: StockData['values'] = Object.keys(timeSeries).map(day => {
       const stocksForDay = timeSeries[day as keyof typeof timeSeries]
